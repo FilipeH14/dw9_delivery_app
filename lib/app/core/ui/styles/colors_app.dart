@@ -15,5 +15,5 @@ class ColorsApp {
 }
 
 extension ColorsAppExtensions on BuildContext {
-  ColorsApp get Colors => ColorsApp.i;
+  ColorsApp get colors => ColorsApp.i;
 }
