@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dw9_delivery_app/app/core/ui/helpers/size_extensions.dart';
 import 'package:dw9_delivery_app/app/core/ui/styles/text_styles.dart';
@@ -52,7 +54,11 @@ class ProductDetailPage extends StatelessWidget {
                 width: context.percentWidth(.5),
                 height: 68,
                 padding: const EdgeInsets.all(8),
-                child: const DeliveryIncrementDecrementWidget(),
+                child: DeliveryIncrementDecrementWidget(
+                  amount: 1,
+                  decremmentTap: () => log('decrementando'),
+                  incrementTap: () => log('incrementando'),
+                ),
               ),
               Container(
                 width: context.percentWidth(.5),
@@ -74,6 +80,7 @@ class ProductDetailPage extends StatelessWidget {
                           maxFontSize: 13,
                           minFontSize: 5,
                           maxLines: 1,
+                          textAlign: TextAlign.center,
                           style: context.textStyles.textExtraBold,
                         ),
                       ),
