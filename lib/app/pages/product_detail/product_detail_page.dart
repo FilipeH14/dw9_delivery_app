@@ -7,6 +7,7 @@ import 'package:dw9_delivery_app/app/core/ui/helpers/size_extensions.dart';
 import 'package:dw9_delivery_app/app/core/ui/styles/text_styles.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_appbar.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_increment_decrement_widget.dart';
+import 'package:dw9_delivery_app/app/dto/order_product_dto.dart';
 import 'package:dw9_delivery_app/app/models/product_model.dart';
 import 'package:dw9_delivery_app/app/pages/product_detail/product_detail_controller.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final ProductModel product;
+  final OrderProductDto? order;
 
   const ProductDetailPage({
     super.key,
     required this.product,
+    this.order,
   });
 
   @override
@@ -26,6 +29,14 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState
     extends BaseState<ProductDetailPage, ProductDetailController> {
+  @override
+  void initState() {
+    final amount = widget.order?.amount ?? 1;
+
+    controller.initial(amount, widget.order != null);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,7 +118,12 @@ class _ProductDetailPageState
                           ),
                         ],
                       ),
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context).pop(
+                        OrderProductDto(
+                          product: widget.product,
+                          amount: amount,
+                        ),
+                      ),
                     );
                   },
                 ),
