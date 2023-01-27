@@ -31,10 +31,45 @@ class _ProductDetailPageState
     extends BaseState<ProductDetailPage, ProductDetailController> {
   @override
   void initState() {
-    final amount = widget.order?.amount ?? 1;
-
-    controller.initial(amount, widget.order != null);
     super.initState();
+
+    final amount = widget.order?.amount ?? 1;
+    controller.initial(amount, widget.order != null);
+  }
+
+  void _showConfirmDelete(int amount) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('Deseja excluir o produto?'),
+        actions: [
+          TextButton(
+            child: Text(
+              'Cancelar',
+              style: context.textStyles.textBold.copyWith(color: Colors.red),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: Text(
+              'Confirmar',
+              style: context.textStyles.textBold,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+
+              Navigator.of(context).pop(
+                OrderProductDto(
+                  product: widget.product,
+                  amount: amount,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -97,33 +132,50 @@ class _ProductDetailPageState
                 child: BlocBuilder<ProductDetailController, int>(
                   builder: (context, amount) {
                     return ElevatedButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Adicionar',
-                            style: context.textStyles.textExtraBold
-                                .copyWith(fontSize: 13),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: AutoSizeText(
-                              (widget.product.price * amount).currencyPTBR,
-                              maxFontSize: 13,
-                              minFontSize: 5,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: context.textStyles.textExtraBold,
+                      style: amount == 0
+                          ? ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red)
+                          : null,
+                      child: Visibility(
+                        visible: amount > 0,
+                        replacement: Text(
+                          'Excluir Produto',
+                          style: context.textStyles.textExtraBold,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Adicionar',
+                              style: context.textStyles.textExtraBold
+                                  .copyWith(fontSize: 13),
                             ),
-                          ),
-                        ],
-                      ),
-                      onPressed: () => Navigator.of(context).pop(
-                        OrderProductDto(
-                          product: widget.product,
-                          amount: amount,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: AutoSizeText(
+                                (widget.product.price * amount).currencyPTBR,
+                                maxFontSize: 13,
+                                minFontSize: 5,
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: context.textStyles.textExtraBold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      onPressed: () {
+                        if (amount == 0) {
+                          _showConfirmDelete(amount);
+                        } else {
+                          Navigator.of(context).pop(
+                            OrderProductDto(
+                              product: widget.product,
+                              amount: amount,
+                            ),
+                          );
+                        }
+                      },
                     );
                   },
                 ),

@@ -27,7 +27,18 @@ class HomeController extends Cubit<HomeState> {
 
   void addOrUpdateBag(OrderProductDto orderProducts) {
     final shoppingBag = [...state.shoppingBag];
-    shoppingBag.add(orderProducts);
+    final orderIndex = shoppingBag
+        .indexWhere((orderP) => orderP.product == orderProducts.product);
+
+    if (orderIndex > -1) {
+      if (orderProducts.amount == 0) {
+        shoppingBag.removeAt(orderIndex);
+      } else {
+        shoppingBag[orderIndex] = orderProducts;
+      }
+    } else {
+      shoppingBag.add(orderProducts);
+    }
 
     emit(state.copyWith(shoppingBag: shoppingBag));
   }
