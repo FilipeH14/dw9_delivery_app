@@ -48,7 +48,7 @@ class OrderProductTile extends StatelessWidget {
                           color: context.colors.secondary,
                         ),
                       ),
-                      DeliveryIncrementDecrementWidget(
+                      DeliveryIncrementDecrementWidget.compact(
                         amount: 1,
                         incrementTap: () {},
                         decremmentTap: () {},
