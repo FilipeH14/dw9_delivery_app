@@ -8,7 +8,7 @@ import 'package:dw9_delivery_app/app/models/payment_type_model.dart';
 part 'order_state.g.dart';
 
 @match
-enum OrderStatus { initial, loading, loaded, error }
+enum OrderStatus { initial, loading, loaded, error, updateOrder }
 
 class OrderState extends Equatable {
   final OrderStatus status;

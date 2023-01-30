@@ -78,6 +78,7 @@ class _LoginPageState extends BaseState<LoginPage, LoginController> {
                       TextFormField(
                         decoration: const InputDecoration(labelText: 'Senha'),
                         controller: _passwordEC,
+                        obscureText: true,
                         validator: Validatorless.required(
                             'O campo senha deve ser preenchido'),
                       ),

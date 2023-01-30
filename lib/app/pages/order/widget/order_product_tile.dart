@@ -3,6 +3,8 @@ import 'package:dw9_delivery_app/app/core/extensions/formatter_extension.dart';
 import 'package:dw9_delivery_app/app/core/ui/styles/colors_app.dart';
 import 'package:dw9_delivery_app/app/core/ui/styles/text_styles.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_increment_decrement_widget.dart';
+import 'package:dw9_delivery_app/app/pages/order/order_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dw9_delivery_app/app/dto/order_product_dto.dart';
@@ -19,7 +21,6 @@ class OrderProductTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final product = orderProduct.product;
 
     return Padding(
@@ -40,7 +41,8 @@ class OrderProductTile extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
-                    style: context.textStyles.textRegular.copyWith(fontSize: 16),
+                    style:
+                        context.textStyles.textRegular.copyWith(fontSize: 16),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,9 +55,13 @@ class OrderProductTile extends StatelessWidget {
                         ),
                       ),
                       DeliveryIncrementDecrementWidget.compact(
-                        amount: 1,
-                        incrementTap: () {},
-                        decremmentTap: () {},
+                        amount: orderProduct.amount,
+                        incrementTap: () => context
+                            .read<OrderController>()
+                            .incrementProduct(index),
+                        decremmentTap: () => context
+                            .read<OrderController>()
+                            .decrementProduct(index),
                       )
                     ],
                   ),
