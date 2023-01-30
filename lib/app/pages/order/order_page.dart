@@ -3,6 +3,7 @@ import 'package:dw9_delivery_app/app/core/ui/styles/text_styles.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_appbar.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_button.dart';
 import 'package:dw9_delivery_app/app/dto/order_product_dto.dart';
+import 'package:dw9_delivery_app/app/models/payment_type_model.dart';
 import 'package:dw9_delivery_app/app/models/product_model.dart';
 import 'package:dw9_delivery_app/app/pages/order/order_controller.dart';
 import 'package:dw9_delivery_app/app/pages/order/order_state.dart';
@@ -33,9 +34,12 @@ class _OrderPageState extends BaseState<OrderPage, OrderController> {
     return BlocListener<OrderController, OrderState>(
       listener: (context, state) {
         state.status.matchAny(
-          any: () => hideLoader(),
-          loading: () => showLoader(),
-        );
+            any: () => hideLoader(),
+            loading: () => showLoader(),
+            error: () {
+              hideLoader();
+              showError(state.errorMessage ?? 'Erro não informado');
+            });
       },
       child: Scaffold(
         appBar: DeliveryAppbar(),
@@ -116,7 +120,13 @@ class _OrderPageState extends BaseState<OrderPage, OrderController> {
                     validator: Validatorless.required('m'),
                     hintText: 'Digite o CPF',
                   ),
-                  const PaymantTypesField(),
+                  BlocSelector<OrderController, OrderState,
+                      List<PaymentTypeModel>>(
+                    selector: (state) => state.paymentTypes,
+                    builder: (context, paymentTypes) {
+                      return PaymantTypesField(paymentTypes: paymentTypes);
+                    },
+                  ),
                 ],
               ),
             ),
