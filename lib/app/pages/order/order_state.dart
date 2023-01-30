@@ -8,7 +8,14 @@ import 'package:dw9_delivery_app/app/models/payment_type_model.dart';
 part 'order_state.g.dart';
 
 @match
-enum OrderStatus { initial, loading, loaded, error, updateOrder }
+enum OrderStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+  updateOrder,
+  confirmRemoveProduct
+}
 
 class OrderState extends Equatable {
   final OrderStatus status;
@@ -29,6 +36,9 @@ class OrderState extends Equatable {
         paymentTypes = const [],
         errorMessage = null;
 
+  double get totalOrder => orderProducts.fold(
+      0.0, (previousValue, element) => previousValue + element.totalPrice);
+
   @override
   List<Object?> get props =>
       [status, orderProducts, paymentTypes, errorMessage];
@@ -46,4 +56,18 @@ class OrderState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+}
+
+class OrderConfirmDeleteProductsState extends OrderState {
+  final OrderProductDto orderProduct;
+  final int index;
+
+  const OrderConfirmDeleteProductsState({
+    required this.orderProduct,
+    required this.index,
+    required super.status,
+    required super.orderProducts,
+    required super.paymentTypes,
+    super.errorMessage,
+  });
 }
