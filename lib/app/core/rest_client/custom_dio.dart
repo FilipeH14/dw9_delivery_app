@@ -25,6 +25,7 @@ class CustomDio extends DioForNative {
     interceptors.add(_authInterceptor);
     return this;
   }
+  
   CustomDio unauth() {
     interceptors.remove(_authInterceptor);
     return this;

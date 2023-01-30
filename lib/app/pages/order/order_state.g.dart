@@ -7,10 +7,17 @@ part of 'order_state.dart';
 // **************************************************************************
 
 extension OrderStatusMatch on OrderStatus {
-  T match<T>({required T Function() initial, required T Function() loaded}) {
+  T match<T>(
+      {required T Function() initial,
+      required T Function() loading,
+      required T Function() loaded}) {
     final v = this;
     if (v == OrderStatus.initial) {
       return initial();
+    }
+
+    if (v == OrderStatus.loading) {
+      return loading();
     }
 
     if (v == OrderStatus.loaded) {
@@ -23,10 +30,15 @@ extension OrderStatusMatch on OrderStatus {
   T matchAny<T>(
       {required T Function() any,
       T Function()? initial,
+      T Function()? loading,
       T Function()? loaded}) {
     final v = this;
     if (v == OrderStatus.initial && initial != null) {
       return initial();
+    }
+
+    if (v == OrderStatus.loading && loading != null) {
+      return loading();
     }
 
     if (v == OrderStatus.loaded && loaded != null) {
