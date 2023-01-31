@@ -3,6 +3,7 @@ import 'package:dw9_delivery_app/app/core/ui/base_state/base_state.dart';
 import 'package:dw9_delivery_app/app/core/ui/styles/text_styles.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_appbar.dart';
 import 'package:dw9_delivery_app/app/core/ui/widgets/delivery_button.dart';
+import 'package:dw9_delivery_app/app/dto/order_dto.dart';
 import 'package:dw9_delivery_app/app/dto/order_product_dto.dart';
 import 'package:dw9_delivery_app/app/models/payment_type_model.dart';
 import 'package:dw9_delivery_app/app/pages/order/order_controller.dart';
@@ -93,6 +94,13 @@ class _OrderPageState extends BaseState<OrderPage, OrderController> {
 
             Navigator.pop(context, <OrderProductDto>[]);
           },
+          success: () {
+            hideLoader();
+            Navigator.of(context).popAndPushNamed(
+              '/order/completed',
+              result: <OrderProductDto>[],
+            );
+          },
         );
       },
       child: WillPopScope(
@@ -118,7 +126,7 @@ class _OrderPageState extends BaseState<OrderPage, OrderController> {
                         ),
                         IconButton(
                           icon: Image.asset('assets/images/trashRegular.png'),
-                          onPressed: () {},
+                          onPressed: () => controller.emptyBag(),
                         ),
                       ],
                     ),
@@ -230,7 +238,13 @@ class _OrderPageState extends BaseState<OrderPage, OrderController> {
 
                             paymentTypeValid.value = paymentTypeSelected;
 
-                            if (valid) {}
+                            if (valid && paymentTypeSelected) {
+                              controller.saveOrder(
+                                address: addressEC.text,
+                                document: documentEC.text,
+                                paymentMethodId: paymentTypeId!,
+                              );
+                            }
                           },
                         ),
                       ),
