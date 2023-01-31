@@ -1,3 +1,4 @@
+import 'package:dw9_delivery_app/app/core/global/global_context.dart';
 import 'package:dw9_delivery_app/app/core/provider/application_binding.dart';
 import 'package:dw9_delivery_app/app/core/ui/theme/theme_config.dart';
 import 'package:dw9_delivery_app/app/pages/auth/login/login_page.dart';
@@ -13,7 +14,12 @@ import 'package:dw9_delivery_app/app/pages/splash/splash_page.dart';
 import 'package:flutter/material.dart';
 
 class Dw9DeliveryApp extends StatelessWidget {
-  const Dw9DeliveryApp({Key? key}) : super(key: key);
+
+  final _navKey = GlobalKey<NavigatorState>();
+
+  Dw9DeliveryApp({super.key}) {
+    GlobalContext.i.navigatorKey = _navKey;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +27,7 @@ class Dw9DeliveryApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Delivery app',
         theme: ThemeConfig.theme,
+        navigatorKey: _navKey,
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const SplashPage(),
