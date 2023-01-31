@@ -60,20 +60,20 @@ class OrderController extends Cubit<OrderState> {
         return;
       } else {
         orders.removeAt(index);
-
-        emit(state.copyWith(
-          orderProducts: orders,
-          status: OrderStatus.updateOrder,
-        ));
       }
     } else {
       orders[index] = order.copyWith(amount: order.amount - 1);
-
-      emit(state.copyWith(
-        orderProducts: orders,
-        status: OrderStatus.updateOrder,
-      ));
     }
+
+    if (orders.isEmpty) {
+      emit(state.copyWith(status: OrderStatus.emptyBag));
+      return;
+    }
+
+    emit(state.copyWith(
+      orderProducts: orders,
+      status: OrderStatus.updateOrder,
+    ));
   }
 
   void cancelDeleteProcess() {
