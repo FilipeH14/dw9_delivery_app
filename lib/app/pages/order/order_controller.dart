@@ -48,7 +48,7 @@ class OrderController extends Cubit<OrderState> {
 
     if (amount == 1) {
       if (state.status != OrderStatus.confirmRemoveProduct) {
-        // Analizar a exclusão do roduto
+        // Analizar a exclusão do produto
         emit(OrderConfirmDeleteProductsState(
           orderProduct: order,
           index: index,
@@ -60,6 +60,11 @@ class OrderController extends Cubit<OrderState> {
         return;
       } else {
         orders.removeAt(index);
+
+        emit(state.copyWith(
+          orderProducts: orders,
+          status: OrderStatus.updateOrder,
+        ));
       }
     } else {
       orders[index] = order.copyWith(amount: order.amount - 1);
